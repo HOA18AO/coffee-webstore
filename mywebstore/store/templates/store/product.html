@@ -1,0 +1,57 @@
+{% extends 'store/product_base.html' %}
+
+{% block title %}{{ product.product_name }}{% endblock %}
+
+{% block categories %}
+<ul class="list-group">
+    <li class="list-group-item">
+        <a href="{% url 'home' %}" class="no-underline">Tất cả sản phẩm</a>
+    </li>
+    {% for category in categories %}
+    <li class="list-group-item">
+        <a href="{% url 'home' %}?category={{ category.category_id }}" class="no-underline">{{ category.category_name }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block product_image %}
+<div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+        {% for image in product_images %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ image.image }}" class="d-block w-100" alt="{{ product.product_name }}">
+        </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+{% endblock %}
+
+{% block product_detail %}
+<h1>{{ product.product_name }}</h1>
+<div class="pro-brand flex-box align-c">
+    <span class="bold">Danh Mục:</span>
+    <span>{{ product.category.category_name }}</span>
+</div>
+<div class="product-price">
+    <span class="pro-price">{{ product.cost|floatformat:0 }}₫</span>
+</div>
+<div class="pro-brand flex-box align-c">
+    <span>{{ product.status|yesno:"Còn hàng,Hết hàng" }}</span>
+</div>
+{% endblock %}
+
+{% block product_information %}
+<div class="pro-txt">
+    <span class="bold">Mô Tả:</span>
+    <span>{{ product.description }}</span>
+</div>
+{% endblock %}

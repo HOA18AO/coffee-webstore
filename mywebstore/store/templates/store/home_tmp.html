@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        /* body{
+            background-color: #3fa256;
+        }*/
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: scale(1.005);
+            transition: all 0.1s ease-in-out;
+        }
+        /* Set the background color for the left category section */
+        .category-section {
+            background-color: lightgreen;
+            height: 100%;
+            padding: 20px;
+        }
+
+        /* Set the white background for the product section */
+        .product-section {
+            background-color: white;
+            height: 100%;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <!-- Navbar for Sign In and other elements -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid" style="border-radius: 10px; background-color: #f8f9fa;">
+            <a class="navbar-brand" href="#">My Product</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="#">Sign In</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    </div>
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-3 category-section">
+                <h4>Categories</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item">Coffee 01</li>
+                        <li class="list-group-item">Coffee 02</li>
+                        <li class="list-group-item">Coffee 03</li>
+                        <li class="list-group-item">Others</li>
+                    </ul>
+            </div>
+            <div class="col-8">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                    <div class="col">
+                        <div class="card">
+                            <img src="https://placehold.co/1200x750" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">Product Item</h5>
+                                <p class="card-text text-truncate" style="max-height: 3rem;">Some brief description of the product.</p>
+                                <a href="#" class="btn btn-primary">View detail of this product</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="https://placehold.co/1200x750" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">Product Item</h5>
+                                <p class="card-text text-truncate" style="max-height: 3rem;">Some brief description of the product.</p>
+                                <a href="#" class="btn btn-primary">View detail of this product</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="https://placehold.co/1200x750" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">Product Item</h5>
+                                <p class="card-text text-truncate" style="max-height: 3rem;">Some brief description of the product.</p>
+                                <a href="#" class="btn btn-primary">View detail of this product</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="https://placehold.co/1200x750" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">Product Item</h5>
+                                <p class="card-text text-truncate" style="max-height: 3rem;">Some brief description of the product.</p>
+                                <a href="#" class="btn btn-primary">View detail of this product</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="https://placehold.co/1200x750" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">Product Item</h5>
+                                <p class="card-text text-truncate" style="max-height: 3rem;">Some brief description of the product.</p>
+                                <a href="#" class="btn btn-primary">View detail of this product</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="https://placehold.co/1200x750" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">Product Item</h5>
+                                <p class="card-text text-truncate" style="max-height: 3rem;">Some brief description of the product.</p>
+                                <a href="#" class="btn btn-primary">View detail of this product</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="https://placehold.co/1200x750" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">Product Item</h5>
+                                <p class="card-text text-truncate" style="max-height: 3rem;">Some brief description of the product.</p>
+                                <a href="#" class="btn btn-primary">View detail of this product</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="https://placehold.co/1200x750" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">Product Item</h5>
+                                <p class="card-text text-truncate" style="max-height: 3rem;">Some brief description of the product.</p>
+                                <a href="#" class="btn btn-primary">View detail of this product</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
