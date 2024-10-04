@@ -35,16 +35,18 @@ Welcome to the **Coffee Webstore**, a private project designed to showcase a ran
    ```
 
 2. Directories structure
-coffee-webstore/
-│
-├── store/                   # Core app handling products, categories
-│   ├── migrations/           # Django migrations
-│   ├── templates/            # HTML templates
-│   ├── models.py             # Database models
-│   └── views.py              # View logic
-│
-├── static/                   # Static files (CSS, JS, images)
-├── templates/                # Base templates
-├── manage.py                 # Django management script
-├── README.md                 # Project readme
-└── requirements.txt          # Python dependencies
+   ```
+   coffee-webstore/
+   │
+   ├── store/                   # Core app handling products, categories
+   │   ├── migrations/           # Django migrations
+   │   ├── templates/            # HTML templates
+   │   ├── models.py             # Database models
+   │   └── views.py              # View logic
+   │
+   ├── static/                   # Static files (CSS, JS, images)
+   ├── templates/                # Base templates
+   ├── manage.py                 # Django management script
+   ├── README.md                 # Project readme
+   └── requirements.txt          # Python dependencies
+   ```
