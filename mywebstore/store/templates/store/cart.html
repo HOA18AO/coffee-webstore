@@ -1,0 +1,132 @@
+{% extends 'store/cart_base.html' %}
+
+{% block title %} Cart {% endblock %}
+
+{% block items %}
+{% for item in items %}
+<div class="row custom-border-bottom align-items-center py-4">
+    <div class="col-2"> {{item.image}} </div>
+    <!-- retrieve the (main) image from model productImage -->
+    
+    <div class="col-3">
+        <h5>{{item.product_name}}</h5>
+        <p class="small">{{item.unit}}</p>
+    </div>
+
+    <div class="col-2">{{item.cost}}</div>
+
+    <div class="col-2">
+        <!-- Quantity Selector -->
+        <div class="quantity-selector d-flex align-items-center justify-content-between" style="width: 100px;">
+            <button class="btn btn-sm btn-outline-secondary decrement" type="button" data-product-id="{{ item.id }}">-</button>
+            <input type="number" class="form-control text-center quantity-input mx-2" value="{{ item.quantity }}" min="1" data-product-id="{{ item.id }}" style="flex-grow: 1; text-align: center; padding: 0; width: 60px; height: 40px;" readonly>
+            <button class="btn btn-sm btn-outline-secondary increment" type="button" data-product-id="{{ item.id }}">+</button>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <!-- {{item.total_cost}} -->
+        <span id="total-cost-{{ item.id }}" data-price="{{ item.cost }}">{{ item.total_cost }}</span>
+    </div>
+
+    <div class="col-1">
+        <button type="button" class="btn-close btn-close-sm remove-item" data-product-id="{{ item.id }}" aria-label="Remove"></button>
+    </div>
+</div>
+
+{% endfor %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Attach event listeners to all remove buttons
+        document.querySelectorAll('.remove-item').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                if (productId) {
+                    // Send an AJAX request to remove the item from the cart
+                    fetch(`/remove_from_cart/${productId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Remove the item from the DOM
+                            this.closest('.row').remove();
+                        } else {
+                            alert('Không thể xóa sản phẩm khỏi giỏ hàng.');
+                        }
+                    });
+                } else {
+                    console.error("Product ID is missing!");
+                }
+            });
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle increment and decrement buttons
+        document.querySelectorAll('.increment').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                console.log(productId);
+                const quantityInput = document.querySelector(`input[data-product-id="${productId}"]`);
+                let quantity = parseInt(quantityInput.value);
+                quantityInput.value = quantity + 1;
+    
+                // Optionally, send an AJAX request to update quantity in the backend
+                updateQuantityAndTotalCost(productId, quantity + 1);
+            });
+        });
+    
+        document.querySelectorAll('.decrement').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                const quantityInput = document.querySelector(`input[data-product-id="${productId}"]`);
+                let quantity = parseInt(quantityInput.value);
+                if (quantity > 1) {
+                    quantityInput.value = quantity - 1;
+    
+                    // Optionally, send an AJAX request to update quantity in the backend
+                    updateQuantityAndTotalCost(productId, quantity - 1);
+                }
+            });
+        });
+        // Update quantity and recalculate total cost
+        function updateQuantityAndTotalCost(productId, newQuantity) {
+            // Get the price for this product from the DOM (assuming you have it stored in a data-price attribute)
+            const priceElement = document.querySelector(`#total-cost-${productId}`);
+            const price = parseFloat(priceElement.getAttribute('data-price'));  // Assuming price is stored here
+
+            // Calculate the new total cost
+            const newTotalCost = (price * newQuantity).toFixed(2);
+
+            // Update the total cost on the page
+            priceElement.innerText = newTotalCost;
+
+            // Send AJAX request to update the quantity in the backend or cookies
+            fetch(`/update_cart_quantity/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',  // Replace with your CSRF token
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: newQuantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert('Failed to update the quantity.');
+                }
+            })
+            .catch(error => console.error('Error updating quantity:', error));
+        }
+    });
+</script>
+
+{% endblock %}

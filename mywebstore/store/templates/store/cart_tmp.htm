@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: scale(1.005);
+            transition: all 0.1s ease-in-out;
+        }
+        .card-title {
+            font-size: medium;
+        }
+        .no-underline {
+            text-decoration: none;
+        }
+        /* Custom styling for the rounded rectangle containers */
+        .rounded-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 15px;
+        }
+        .custom-border-bottom {
+            border-bottom: 1px solid #043107; /* Blue bottom border */
+        }
+        .sidebarCart-sticky {
+            position: -webkit-sticky; /* For Safari */
+            position: sticky;
+            top: 0; /* Stick the sidebar at the top of the viewport */
+            left: 0; /* Align the sidebar to the left */
+            z-index: 100; /* Ensure it's above other content if necessary */
+            padding: 20px;
+            height: 40vh; /* Full height */
+            background-color: #f8f9fa; /* Light background for better visibility */
+            border-right: 2px solid #007bff; /* Optional border */
+            overflow-y: auto; /* Allows vertical scrolling if content overflows */
+        }
+        .inline-block {
+            display: flex;                  /* Flexbox for alignment */
+            align-items: center;            /* Center buttons vertically */
+            justify-content: space-between; /* Distribute the buttons and input evenly */
+            max-width: 120px;               /* Adjust width based on your layout needs */
+        }
+        
+        .size-6 {
+            width: 30px;  /* Adjust button width */
+            height: 30px; /* Adjust button height */
+        }
+        
+        input[type="number"] {
+            text-align: center;             /* Align the text in the center */
+            width: 40px;                    /* Set input width */
+            height: 30px;                   /* Set input height */
+        }
+        
+        button svg {
+            width: 12px;   /* Set SVG size */
+            height: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar for all pages -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">My Product</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="#">Sign In</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-9">
+                <div class="rounded-box">
+                    <div class="row custom-border-bottom text-center">
+                        <div class="col-2">&nbsp;</div>
+                        <div class="col-3">Sản phẩm</div>
+                        <div class="col-2">Giá</div>
+                        <div class="col-2">Số lượng</div>
+                        <div class="col-2">Thành tiền</div>
+                        <div class="col-1">&nbsp;</div>
+                        <!-- this div is a part of the template -->
+                    </div>
+                    <div class="row custom-border-bottom align-items-center py-4">
+                        <div class="col-2">
+                            <img src="https://placehold.co/180x180" class="img-fluid" alt="Hinh anh san pham">
+                        </div>
+                        <div class="col-3">
+                            <h5>Ten San Pham</h5>
+                            <p class="small">gói 250g</p>
+                        </div>
+                        <div class="col-2">Gia san pham/1 don vi</div>
+                        <div class="col-2">So luong</div>
+                        <div class="col-2">Thanh tien</div>
+                        <div class="col-1">X</div>
+                        <!-- I want this X to be a button that allow customers remove the item from cart when they click on it -->
+                    </div>
+                    <div class="row custom-border-bottom align-items-center py-4">
+                        <div class="col-2">
+                            <img src="https://placehold.co/180x180" class="img-fluid" alt="Hinh anh san pham">
+                        </div>
+                        <div class="col-3">
+                            <h5>Ten San Pham</h5>
+                            <p class="small">gói 250g</p>
+                        </div>
+                        <div class="col-2">Gia san pham/1 don vi</div>
+                        <div class="col-2">So luong</div>
+                        <div class="col-2">Thanh tien</div>
+                        <div class="col-1">X</div>
+                    </div>
+                    <div class="row custom-border-bottom align-items-center py-4">
+                        <div class="col-2">
+                            <img src="https://placehold.co/180x180" class="img-fluid" alt="Hinh anh san pham">
+                        </div>
+                        <div class="col-3">
+                            <h5>Ten San Pham</h5>
+                            <p class="small">gói 250g</p>
+                        </div>
+                        <div class="col-2">Gia san pham/1 don vi</div>
+                        <div class="col-2">So luong</div>
+                        <div class="col-2">Thanh tien</div>
+                        <div class="col-1">X</div>
+                    </div>
+                    <div class="row custom-border-bottom align-items-center py-4">
+                        <div class="col-2">
+                            <img src="https://placehold.co/180x180" class="img-fluid" alt="Hinh anh san pham">
+                        </div>
+                        <div class="col-3">
+                            <h5>Ten San Pham</h5>
+                            <p class="small">gói 250g</p>
+                        </div>
+                        <div class="col-2">Gia san pham/1 don vi</div>
+                        <div class="col-2">So luong</div>
+                        <div class="col-2">Thanh tien</div>
+                        <div class="col-1">X</div>
+                    </div>
+                    <div class="row custom-border-bottom align-items-center py-4">
+                        <div class="col-2">
+                            <img src="https://placehold.co/180x180" class="img-fluid" alt="Hinh anh san pham">
+                        </div>
+                        <div class="col-3">
+                            <h5>Ten San Pham</h5>
+                            <p class="small">gói 250g</p>
+                        </div>
+                        <div class="col-2">Gia san pham/1 don vi</div>
+                        <div class="col-2">
+                            <!-- Input Number -->
+                            
+                                <div class="row">
+                                    <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" tabindex="-1" aria-label="Decrease" data-hs-input-number-decrement="">
+                                        <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14"></path>
+                                        </svg>
+                                    </button>
+                                    <input class="p-0 w-6 bg-transparent border-0 text-gray-800 text-center focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:text-white" style="-moz-appearance: textfield;" type="number" aria-roledescription="Number field" value="1" min="1" data-hs-input-number-input="">
+                                    <button type="button" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" tabindex="-1" aria-label="Increase" data-hs-input-number-increment="">
+                                    <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M5 12h14"></path>
+                                        <path d="M12 5v14"></path>
+                                    </svg>
+                                    </button>
+                                </div>
+                            <!-- End Input Number -->
+                        </div>
+                        <div class="col-2">Thanh tien</div>
+                        <div class="col-1">X</div>
+                    </div>
+                    <div class="row custom-border-bottom align-items-center py-4">
+                        <div class="col-2">
+                            <img src="https://placehold.co/180x180" class="img-fluid" alt="Hinh anh san pham">
+                        </div>
+                        <div class="col-3">
+                            <h5>Ten San Pham</h5>
+                            <p class="small">gói 250g</p>
+                        </div>
+                        <div class="col-2">Gia san pham/1 don vi</div>
+                        <div class="col-2">So luong</div>
+                        <div class="col-2">Thanh tien</div>
+                        <div class="col-1">X</div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        
+            <div class="col-3">  
+                <div class="rounded-box border-primary sidebarCart-sticky d-flex flex-column">
+                    <h5> Thanh tien </h5>
+                    <div class="row">
+                        <span>Tam tinh</span>
+                    </div>
+                    <div class="row">
+                        <span>Tong tien</span>
+                    </div>
+                    <div class="row">
+                        <span>Ngay giao hang</span>
+                    </div>
+                    <!-- This div will take up the remaining space -->
+                    <div class="row flex-grow-1"></div>
+                    <div class="row mt-3">
+                        <!-- Thanh Toán Button -->
+                        <button type="button" class="btn btn-success btn-block" onclick="printHelloWorld()">Thanh Toán</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-3">
+        <p>&copy; 2024 My Product. All rights reserved.</p>
+    </footer>
+    <script>
+        function printHelloWorld(){
+            alert("Hello World");
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
