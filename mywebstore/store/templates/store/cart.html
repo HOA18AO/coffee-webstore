@@ -36,6 +36,8 @@
 
 {% endfor %}
 
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Attach event listeners to all remove buttons
@@ -43,7 +45,6 @@
             button.addEventListener('click', function() {
                 const productId = this.getAttribute('data-product-id');
                 if (productId) {
-                    // Send an AJAX request to remove the item from the cart
                     fetch(`/remove_from_cart/${productId}/`, {
                         method: 'POST',
                         headers: {
@@ -54,8 +55,10 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Remove the item from the DOM
                             this.closest('.row').remove();
+                            setTimeout(() => {
+                                updateTotalBill(); // Ensure bill update
+                            }, 100);  // Optional slight delay
                         } else {
                             alert('Không thể xóa sản phẩm khỏi giỏ hàng.');
                         }
@@ -65,18 +68,14 @@
                 }
             });
         });
-    });
-    document.addEventListener('DOMContentLoaded', function() {
+    
         // Handle increment and decrement buttons
         document.querySelectorAll('.increment').forEach(button => {
             button.addEventListener('click', function() {
                 const productId = this.getAttribute('data-product-id');
-                console.log(productId);
                 const quantityInput = document.querySelector(`input[data-product-id="${productId}"]`);
                 let quantity = parseInt(quantityInput.value);
                 quantityInput.value = quantity + 1;
-    
-                // Optionally, send an AJAX request to update quantity in the backend
                 updateQuantityAndTotalCost(productId, quantity + 1);
             });
         });
@@ -88,35 +87,28 @@
                 let quantity = parseInt(quantityInput.value);
                 if (quantity > 1) {
                     quantityInput.value = quantity - 1;
-    
-                    // Optionally, send an AJAX request to update quantity in the backend
                     updateQuantityAndTotalCost(productId, quantity - 1);
                 }
             });
         });
+    
         // Update quantity and recalculate total cost
         function updateQuantityAndTotalCost(productId, newQuantity) {
-            // Get the price for this product from the DOM (assuming you have it stored in a data-price attribute)
             const priceElement = document.querySelector(`#total-cost-${productId}`);
-            const price = parseFloat(priceElement.getAttribute('data-price'));  // Assuming price is stored here
-
-            // Calculate the new total cost
+            const price = parseFloat(priceElement.getAttribute('data-price'));
             const newTotalCost = (price * newQuantity).toFixed(2);
-
-            // Update the total cost on the page
             priceElement.innerText = newTotalCost;
 
-            // Send AJAX request to update the quantity in the backend or cookies
+            // let formatedTotalCost = formatCurrency(newTotalCost)
+            updateTotalBill();
+    
             fetch(`/update_cart_quantity/`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRFToken': '{{ csrf_token }}',  // Replace with your CSRF token
+                    'X-CSRFToken': '{{ csrf_token }}',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    product_id: productId,
-                    quantity: newQuantity
-                })
+                body: JSON.stringify({ product_id: productId, quantity: newQuantity })
             })
             .then(response => response.json())
             .then(data => {
@@ -126,7 +118,32 @@
             })
             .catch(error => console.error('Error updating quantity:', error));
         }
+    
+        // Recalculate the total bill by summing up all product total costs
+        function updateTotalBill() {
+            let totalBill = 0;
+            document.querySelectorAll('[id^="total-cost-"]').forEach(el => {
+                totalBill += parseFloat(el.innerText);
+            });
+            console.log("Total Bill: ", totalBill);  // Log the total bill to check the value
+            // console.log(typeof(totalBill))
+            // console.log(formatCurrency(totalBill))
+            // let formatedTotalBill = formatCurrency(totalBill)
+            document.getElementById('total-bill-temp').innerText = totalBill.toFixed(2) + 'đ';
+            document.getElementById('total-bill-final').innerText = totalBill.toFixed(2) + 'đ';
+        }
+
     });
 </script>
 
+{% endblock %}
+
+{% block totalcost_temp %}
+<!-- Temporary total cost -->
+<span id="total-bill-temp">{{ total_bill }}đ</span>
+{% endblock %}
+
+{% block totalcost %}
+<!-- Final total cost -->
+<span id="total-bill-final">{{ total_bill }}đ</span>
 {% endblock %}

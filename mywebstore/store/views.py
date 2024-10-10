@@ -1,7 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from store.models import CoffeeProduct, Category, ProductImage
+from store.models import CoffeeProduct, Category, ProductImage, Province, District, Ward
+from store.models import Address, Customer, CoffeeProduct, Order, OrderItem
 from django.http import HttpResponse, JsonResponse
+from django.template.loader import render_to_string
 import json
+
+
 
 # Create your views here.
 def home_view(request):
@@ -82,28 +86,6 @@ def remove_from_cart(request, product_id):
     print(request.COOKIES.get('cart'))
     return JsonResponse({'success': False})
 
-# def update_cart_quantity(request):
-#     if request.method == 'POST':
-#         data = json.loads(request.body)
-#         product_id = str(data.get('product_id'))
-#         new_quantity = int(data.get('quantity'))
-#         print(f'{product_id}')
-#         # Get cart from cookies
-#         cart = request.COOKIES.get('cart', {})
-        
-#         if product_id in cart:
-#             # cart[product_id]['quantity'] = new_quantity
-#             cart[product_id] = new_quantity
-
-#         # print(cart)
-#         # Update the cookie
-#         response = JsonResponse({'success': True})
-#         response.set_cookie('cart', cart)
-#         print(request.COOKIES.get('cart'))
-#         return response
-
-#     return JsonResponse({'success': False})
-
 def update_cart_quantity(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -125,7 +107,7 @@ def update_cart_quantity(request):
         # Update the cookie with the modified cart
         response = JsonResponse({'success': True})
         response.set_cookie('cart', cart_data, max_age=60*60*24*1)  # 1 day
-        # print(cart_data) # EXAMPLE: {"27": 2, "28": 3, "29": 9}
+        print(cart_data) # EXAMPLE: {"27": 2, "28": 3, "29": 9}
         # print(request.COOKIES.get('cart')) # EXAMPLE: {"27": 2, "28": 3, "29": 8} # because the respone.set_cookie() DOES NOT update the cookie imidiately, so everything is good
         return response
 
@@ -161,3 +143,96 @@ def cart_view(request):
     # print(cart)
 
     return render(request, 'store/cart.html', context)
+
+def checkout(request):
+    # Load cart data from cookies (assuming it is stored in cookies)
+    cart = json.loads(request.COOKIES.get('cart', '{}'))
+    print(cart) # it returns a dictionary, keys are product id, values are quantity of each one
+    cart_items = []
+    total_cost = 0
+
+    # Example logic to calculate total cost and cart items
+    for item_id, quantity in cart.items(): # {'1': 1, '2': 1, '3': 1}, e.g
+        product = CoffeeProduct.objects.get(id=item_id)
+        item_total = product.cost * quantity
+        total_cost += item_total
+        cart_items.append({
+            'product': product,
+            'quantity': quantity,
+            'item_total': item_total
+        })
+
+    if request.method == 'POST':
+        # Handle form submission for placing an order
+        name = request.POST.get('name')
+        mobile = request.POST.get('mobile')
+        province_id = request.POST.get('province')
+        district_id = request.POST.get('district')
+        ward_id = request.POST.get('ward')
+        address_line = request.POST.get('address-line')
+
+        # Create or update the Customer object
+        customer, created = Customer.objects.get_or_create(mobile=mobile, defaults={'name': name})
+
+        # Create the Address object
+        ward = Ward.objects.get(id=ward_id)
+        address = Address.objects.create(address_line=address_line, ward=ward)
+
+        # Link customer to the new address
+        customer.address = address
+        customer.save()
+
+        # Create the Order object
+        order = Order.objects.create(
+            customer=customer,
+            address=address,
+            total_cost=total_cost
+        )
+
+        # Create OrderItems for the order based on the cart data
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                item=item['product'],
+                cost=item['item_total'],
+                quantity=item['quantity']
+            )
+
+        # Clear the cart and redirect to a success page
+        # response = redirect('checkout_success')
+        # response.delete_cookie('cart')
+        # return response
+
+    # Load province, district, and ward options for the form
+    provinces = Province.objects.all()
+    districts = District.objects.all()
+    wards     = Ward.objects.all()
+
+    context = {
+        'cart_items': cart_items,
+        'total_cost': total_cost,
+        'provinces': provinces,
+        'districts': districts,
+        'wards' : wards,
+    }
+    # print(request.COOKIES.get('cart')) # {"1": 1, "2": 1, "3": 1}
+    # print(cart_items)
+    for item in cart_items:
+        print(item.keys())
+        print(item['product'])
+    return render(request, 'store/checkout.html', context)
+
+def load_districts(request):
+    province_id = request.GET.get('province_id')
+    print(province_id)
+    districts = District.objects.filter(province_id=province_id)
+    print(districts)
+    html = render_to_string('store/partials/district_dropdown_options.html', {'districts': districts})
+    return JsonResponse({'html': html})
+
+def load_wards(request):
+    district_id = request.GET.get('district_id')
+    wards = Ward.objects.filter(district_id=district_id)
+    print(wards)
+    html = render_to_string('store/partials/ward_dropdown_options.html', {'wards': wards})
+    return JsonResponse({'html': html})

@@ -1,0 +1,16 @@
+{% extends 'store/checkout_base.html' %}
+
+{% block summary_items %}
+    {% for item in cart_items %}
+    <div class="d-flex justify-content-between mb-2">
+        <!-- Product name and quantity -->
+        <span>{{ item.product }} (x{{ item.quantity }})</span>
+        <!-- Total cost for the product -->
+        <span>{{ item.item_total }} VND</span>
+    </div>
+    {% endfor %}
+{% endblock %}
+
+{% block total_bill %}
+{{ total_cost }}đ
+{% endblock %}
